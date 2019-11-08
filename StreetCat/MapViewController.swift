@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import NMapsMap
 import SnapKit
+import SwiftUI
 
 class MapViewController: UIViewController {
 
@@ -17,7 +18,7 @@ class MapViewController: UIViewController {
     let controlPanelContainerView = ControlPanelContainerView(frame: .zero)
 
     // TODO: SwiftUI 작업
-    let floatingPanelViewController = UIViewController()
+    let floatingListViewController = UIHostingController(rootView: ModalView(contentView: InnerContentView()))
 
     let miniFloatingView = MiniFloatingView(frame: .zero)
 
@@ -55,8 +56,35 @@ class MapViewController: UIViewController {
             $0.bottom.equalTo(controlPanelContainerView.snp.top).offset(35)
             $0.height.equalTo(0)
         }
+        
+        floatingListViewController.view.clipsToBounds = true
+        floatingListViewController.view.layer.cornerRadius = 24
+        floatingListViewController.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 
+    private func bindActions() {
+        self.miniFloatingView.aroundView.didTapCatButton = {[weak self] _ in
+            guard let self = self else { return }
+            
+            self.floatingListViewController.rootView = ModalView(contentView: InnerContentView())
+            self.navigationController?.present(self.floatingListViewController, animated: true, completion: nil)
+        }
+        
+        self.miniFloatingView.aroundView.didTapHospitalButton = {[weak self] _ in
+            guard let self = self else { return }
+            
+            self.floatingListViewController.rootView = ModalView(contentView: InnerContentView())
+            self.navigationController?.present(self.floatingListViewController, animated: true, completion: nil)
+        }
+        
+        self.miniFloatingView.aroundView.didTapShelterButton = {[weak self] _ in
+            guard let self = self else { return }
+            
+            self.floatingListViewController.rootView = ModalView(contentView: InnerContentView())
+            self.navigationController?.present(self.floatingListViewController, animated: true, completion: nil)
+        }
+    }
+    
     private func tapControlPanelButton(sender: UIButton, type: FloatingViewType) {
         let isSelected = !sender.isSelected
         
@@ -70,6 +98,8 @@ class MapViewController: UIViewController {
         }
 
         self.miniFloatingView.viewModel = MiniFloatingViewModel(type: type, isSelected: isSelected)
+        
+        bindActions()
         
         UIView.animate(withDuration: 0.7, delay: 0.1, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()

@@ -26,6 +26,8 @@ class MiniFloatingView: UIView {
 
             configureContent(type: viewModel.type)
             configureAppearance(isSelected: viewModel.isSelected, type: viewModel.type)
+            
+            aroundView.didTapShelterButton = viewModel.didTapShelterButton
         }
     }
     
@@ -41,6 +43,9 @@ class MiniFloatingView: UIView {
         self.clipsToBounds = true
         layer.cornerRadius = 24
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        aroundView.didTapCatButton = viewModel.didTapCatButton
+        
     }
     
     required init?(coder: NSCoder) {

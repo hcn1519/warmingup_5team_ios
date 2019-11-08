@@ -22,7 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let mapViewController = MapViewController(nibName: nil, bundle: nil)
-            window.rootViewController = mapViewController
+            let navigationController = UINavigationController(rootViewController: mapViewController)
+            window.rootViewController = navigationController
+            navigationController.isNavigationBarHidden = true
             self.window = window
             window.makeKeyAndVisible()
         }
